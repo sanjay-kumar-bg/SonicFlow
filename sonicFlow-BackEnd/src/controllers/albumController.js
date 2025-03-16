@@ -4,14 +4,14 @@ import albumModel from '../models/albumModel.js';
 const addAlbum = async(req,res)=>{
     try {
         const name = req.body.name;
-        const description = req.body.description;
+        const desc = req.body.desc;
         const bgColour = req.body.bgColour;
         const imageFile = req.file;
         const imageUpload = await cloudinary.uploader.upload(imageFile.path,{resource_type: "image"});
 
         const albumData = {
             name,
-            description,
+            desc,
             bgColour,
             image: imageUpload.secure_url
         }
