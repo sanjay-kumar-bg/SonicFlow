@@ -35,8 +35,8 @@ const AddSong = () => {
         setName("");
         setDesc("");
         setAlbum("none");
-        setImage("false");
-        setSong("false");
+        setImage(false);
+        setSong(false);
         
       } 
       else
