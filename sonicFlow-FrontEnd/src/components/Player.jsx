@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
@@ -24,8 +24,8 @@ const Player = () => {
   const toggleLoop = () => setIsLoop((prev) => !prev);
 
   return track ? (
-    <div>
-      <div className="h-[10%] bg-black flex justify-between items-center text-white px-4">
+    <div className="fixed bottom-0 left-0 right-0 z-50">
+      <div className="h-[90px] bg-black flex justify-between items-center text-white px-4 border-t border-[#282828]">
         <div className="hidden lg:flex items-center gap-4">
           <img className="w-12" src={track.image} alt="Track" />
           <div>
@@ -36,23 +36,18 @@ const Player = () => {
 
         <div className="flex flex-col items-center gap-1 m-auto">
           <div className="flex gap-4">
-            {/* Shuffle Button */}
             <img
               className="w-4 cursor-pointer"
               src={assets.shuffle_icon}
               alt="shuffle"
               onClick={toggleShuffle}
             />
-
-            {/* Previous Button */}
             <img
               onClick={previous}
               className="w-4 cursor-pointer"
               src={assets.prev_icon}
               alt="previous"
             />
-
-            {/* Play / Pause Button */}
             {!playStatus ? (
               <img
                 onClick={play}
@@ -68,16 +63,12 @@ const Player = () => {
                 alt="pause"
               />
             )}
-
-            {/* Next Button */}
             <img
               onClick={next}
               className="w-4 cursor-pointer"
               src={assets.next_icon}
               alt="next"
             />
-
-            {/* Loop Button */}
             <img
               className="w-4 cursor-pointer"
               src={assets.loop_icon}
@@ -86,7 +77,6 @@ const Player = () => {
             />
           </div>
 
-          {/* Time and Seek Bar */}
           <div className="flex items-center gap-5">
             <p>
               {time.currentTime.minute}:{time.currentTime.second}
@@ -107,7 +97,6 @@ const Player = () => {
           </div>
         </div>
 
-        {/* Additional Controls */}
         <div className="hidden lg:flex items-center gap-2 opacity-75">
           <img className="w-4" src={assets.plays_icon} alt="play" />
           <img className="w-4" src={assets.mic_icon} alt="mic" />

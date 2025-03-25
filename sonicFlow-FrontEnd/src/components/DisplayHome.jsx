@@ -37,7 +37,7 @@ const DisplayHome = () => {
       <>
          <Navbar />
          <div className='mb-4'>
-            <h1 className='my-5 font=blod text-2xl'>Featured Charts</h1>
+            <h1 className='my-5 font-bold text-2xl'>Featured Charts</h1>
             <div className='flex flex-row overflow-x-auto gap-4 pb-4 no-scrollbar'>
                {Array.isArray(albumsData) && albumsData.length > 0 ? (
                   albumsData.map((item, index) => (
@@ -50,7 +50,7 @@ const DisplayHome = () => {
          </div>  
 
          <div className='mb-4'>
-            <h1 className='my-5 font=blod text-2xl'>Today's biggest hits</h1>
+            <h1 className='my-5 font-bold text-2xl'>Today's biggest hits</h1>
             <div className='flex flex-row overflow-x-auto gap-4 pb-4 no-scrollbar'>
                {Array.isArray(songsData) && songsData.length > 0 ? (
                   songsData.map((item, index) => (
