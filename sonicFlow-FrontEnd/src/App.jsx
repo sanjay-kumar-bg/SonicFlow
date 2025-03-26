@@ -19,6 +19,7 @@ const App = () => {
               <div className="h-[90%] flex">
                 <Sidebar />
                 <Routes>
+                  
                   <Route path="/" element={<Display />} />
                   <Route path="/radio" element={<Radio />} />
                   <Route path="/album/:id" element={<Display />} />

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
@@ -17,11 +17,53 @@ const Player = () => {
     isShuffle,
     setIsShuffle,
     isLoop,
-    setIsLoop,
+    toggleLoop,
+    audioRef,
+    toggleMute,
+    isMuted,
+    volume,
+    handleVolumeChange,
+    handleSongEnd,
+
+    
+    
   } = useContext(PlayerContext);
 
   const toggleShuffle = () => setIsShuffle((prev) => !prev);
-  const toggleLoop = () => setIsLoop((prev) => !prev);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    const updateTime = () => {
+      if (!audioRef.current.duration) return;
+      seekBar.current.style.width = `${Math.floor(
+        (audioRef.current.currentTime / audioRef.current.duration) * 100
+      )}%`;
+      setTime({
+        currentTime: {
+          second: String(
+            Math.floor(audioRef.current.currentTime % 60)
+          ).padStart(2, "0"),
+          minute: Math.floor(audioRef.current.currentTime / 60),
+        },
+        totalTime: {
+          second: String(Math.floor(audioRef.current.duration % 60)).padStart(
+            2,
+            "0"
+          ),
+          minute: Math.floor(audioRef.current.duration / 60),
+        },
+      });
+    };
+
+    audioRef.current.addEventListener("timeupdate", updateTime);
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.removeEventListener("timeupdate", updateTime);
+      }
+    };
+  }, [audioRef]);
 
   return track ? (
     <div className="fixed bottom-0 left-0 right-0 z-50">
@@ -70,10 +112,11 @@ const Player = () => {
               alt="next"
             />
             <img
+              onClick={toggleLoop}
               className="w-4 cursor-pointer"
               src={assets.loop_icon}
               alt="loop"
-              onClick={toggleLoop}
+              
             />
           </div>
 
@@ -101,9 +144,29 @@ const Player = () => {
           <img className="w-4" src={assets.plays_icon} alt="play" />
           <img className="w-4" src={assets.mic_icon} alt="mic" />
           <img className="w-4" src={assets.queue_icon} alt="queue" />
-          <img className="w-4" src={assets.speaker_icon} alt="speaker" />
-          <img className="w-4" src={assets.volume_icon} alt="volume" />
-          <div className="w-20 bg-slate-50 h-1 rounded"></div>
+          
+          
+
+          <img
+            onClick={toggleMute}
+            className={`w-4 cursor-pointer ${isMuted ? 'opacity-50' : ''}`}
+            src={assets.volume_icon}
+            alt="speaker"
+          />
+          
+        
+         
+           <input
+           type="range"
+           min="0"
+           max="1"
+           step="0.01"
+           value={volume}
+           onChange={handleVolumeChange}
+           className="w-20 bg-slate-50 h-1 rounded"
+         />
+          
+         
           <img
             className="w-4"
             src={assets.mini_player_icon}

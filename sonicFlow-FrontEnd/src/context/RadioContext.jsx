@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { PlayerContext } from './PlayerContext';
 
 export const RadioContext = createContext();
 
@@ -8,6 +9,8 @@ export const RadioProvider = ({ children }) => {
   const [currentStation, setCurrentStation] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(new Audio());
+
+  const { pause: pauseSong } = useContext(PlayerContext);
 
   useEffect(() => {
     const handlePlaying = () => setIsPlaying(true);
@@ -37,6 +40,7 @@ export const RadioProvider = ({ children }) => {
       if (currentStation) {
         audio.pause();
       }
+      pauseSong();
       setCurrentStation(station);
       audio.src = station.url_resolved;
       audio.play().catch(e => {

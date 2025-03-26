@@ -18,6 +18,7 @@ export const PlayerContextProvider = ({ children }) => {
   const [songsData, setSongsData] = useState([]);
   const [albumsData, setAlbumsData] = useState([]);
   const [track, setTrack] = useState(null); // Default track should be null, not undefined
+  const [isLoop, setIsLoop] = useState(false);
   const [playStatus, setPlayStatus] = useState(false);
   const [time, setTime] = useState({
     currentTime: {
@@ -30,6 +31,8 @@ export const PlayerContextProvider = ({ children }) => {
     },
   });
 
+  const [isMuted, setIsMuted] = useState(false); // Add state for mute status
+  const [volume, setVolume] = useState(1); // Default volume is 1 (max)
   // Play and Pause functions
   const play = () => {
     if (audioRef.current) {
@@ -74,6 +77,34 @@ export const PlayerContextProvider = ({ children }) => {
       }
     });
   };
+
+    // Toggle loop functionality
+    const toggleLoop = () => {
+      setIsLoop((prev) => {
+        if (!prev) {
+          // If loop is turned on, restart the current song immediately
+          if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play();
+          }
+          // Add the event listener to loop the song
+          audioRef.current.addEventListener('ended', handleSongEnd);
+        } else {
+          // If loop is turned off, remove the event listener to stop looping
+          audioRef.current.removeEventListener('ended', handleSongEnd);
+        }
+        return !prev;
+      });
+    };
+
+    const handleSongEnd = () => {
+      if (isLoop && audioRef.current) {
+        // When the song ends, restart the same song from the beginning
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    };
+
 
   const seekSong = (e) => {
     if (audioRef.current && seekBg.current) {
@@ -138,6 +169,22 @@ export const PlayerContextProvider = ({ children }) => {
     };
   }, []);
 
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;  // Toggle mute
+      setIsMuted(!isMuted);  // Update mute status
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value;
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume; // Update audio volume
+      setVolume(newVolume); // Update volume state
+    }
+  };
+
+
   // Fetch data on component mount
   useEffect(() => {
     getSongsData();
@@ -163,6 +210,13 @@ export const PlayerContextProvider = ({ children }) => {
     seekSong,
     songsData,
     albumsData,
+    toggleMute,
+    isMuted, // Provide mute status in context
+    volume,
+    handleVolumeChange,
+    isLoop,
+    toggleLoop,
+   
   };
 
   return (
