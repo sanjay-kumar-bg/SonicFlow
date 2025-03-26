@@ -4,7 +4,6 @@ import { RadioProvider } from './context/RadioContext';
 import Sidebar from "./components/Sidebar";
 import Player from "./components/Player";
 import Display from "./components/Display";
-import RadioPage from "./pages/RadioPage";
 import { PlayerContext } from "./context/PlayerContext";
 import Radio from './components/Radio';
 
@@ -22,6 +21,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Display />} />
                   <Route path="/radio" element={<Radio />} />
+                  <Route path="/album/:id" element={<Display />} />
                 </Routes>
               </div>
               <Player />

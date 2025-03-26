@@ -4,20 +4,31 @@ import { useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
-const DisplayAlbum = ({ album }) => {
+const DisplayAlbum = () => {
   const { id } = useParams();
-  const [albumData, setAlbumData] = useState("");
+  const [albumData, setAlbumData] = useState(null);
   const { playWithId, albumsData, songsData } = useContext(PlayerContext);
 
   useEffect(() => {
-    albumsData.map((item) => {
-      if (item._id === id) {
-        setAlbumData(item);
+    // Find album by ID and set it to state
+    if (albumsData && albumsData.length > 0) {
+      const foundAlbum = albumsData.find(item => item._id === id);
+      if (foundAlbum) {
+        setAlbumData(foundAlbum);
       }
-    });
-  }, []);
+    }
+  }, [id, albumsData]);
 
-  return albumData ? (
+  // Filter songs that belong to this album
+  const albumSongs = songsData.filter(
+    (song) => albumData && song.album === albumData.name
+  );
+
+  if (!albumData) {
+    return <div>Loading album...</div>;
+  }
+
+  return (
     <>
       <Navbar />
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-end">
@@ -35,7 +46,7 @@ const DisplayAlbum = ({ album }) => {
               alt=""
             />
             <b>Spotify</b>
-            •1,323,154 likes •<b> 50 songs,</b>
+            •1,323,154 likes •<b> {albumSongs.length} songs,</b>
             about 2 hr 30 min •
           </p>
         </div>
@@ -49,9 +60,8 @@ const DisplayAlbum = ({ album }) => {
         <img className="m-auto w-4" src={assets.clock_icon} alt="" />
       </div>
       <hr />
-      {songsData
-        .filter((item) => item.album === album.name)
-        .map((item, index) => (
+      {albumSongs.length > 0 ? (
+        albumSongs.map((item, index) => (
           <div
             onClick={() => playWithId(item._id)}
             key={index}
@@ -66,9 +76,12 @@ const DisplayAlbum = ({ album }) => {
             <p className="text-[15px] hidden sm:block">5 days ago</p>
             <p className="text-[15px] text-center">{item.duration}</p>
           </div>
-        ))}
+        ))
+      ) : (
+        <p className="text-center my-4">No songs in this album</p>
+      )}
     </>
-  ) : null;
+  );
 };
 
 export default DisplayAlbum;
