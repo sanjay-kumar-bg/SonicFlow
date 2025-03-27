@@ -12,7 +12,7 @@ export const PlayerContextProvider = ({ children }) => {
   const seekBg = useRef();
   const seekBar = useRef();
 
-  const url = "http://localhost:4000"; // Fix the URL typo
+  const url = "http://sonicflow"; // Fix the URL typo
 
   // States for songs, albums, track, play status, and time
   const [songsData, setSongsData] = useState([]);
@@ -78,33 +78,32 @@ export const PlayerContextProvider = ({ children }) => {
     });
   };
 
-    // Toggle loop functionality
-    const toggleLoop = () => {
-      setIsLoop((prev) => {
-        if (!prev) {
-          // If loop is turned on, restart the current song immediately
-          if (audioRef.current) {
-            audioRef.current.currentTime = 0;
-            audioRef.current.play();
-          }
-          // Add the event listener to loop the song
-          audioRef.current.addEventListener('ended', handleSongEnd);
-        } else {
-          // If loop is turned off, remove the event listener to stop looping
-          audioRef.current.removeEventListener('ended', handleSongEnd);
+  // Toggle loop functionality
+  const toggleLoop = () => {
+    setIsLoop((prev) => {
+      if (!prev) {
+        // If loop is turned on, restart the current song immediately
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play();
         }
-        return !prev;
-      });
-    };
-
-    const handleSongEnd = () => {
-      if (isLoop && audioRef.current) {
-        // When the song ends, restart the same song from the beginning
-        audioRef.current.currentTime = 0;
-        audioRef.current.play();
+        // Add the event listener to loop the song
+        audioRef.current.addEventListener("ended", handleSongEnd);
+      } else {
+        // If loop is turned off, remove the event listener to stop looping
+        audioRef.current.removeEventListener("ended", handleSongEnd);
       }
-    };
+      return !prev;
+    });
+  };
 
+  const handleSongEnd = () => {
+    if (isLoop && audioRef.current) {
+      // When the song ends, restart the same song from the beginning
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    }
+  };
 
   const seekSong = (e) => {
     if (audioRef.current && seekBg.current) {
@@ -118,6 +117,7 @@ export const PlayerContextProvider = ({ children }) => {
   const getSongsData = async () => {
     try {
       const response = await axios.get(`${url}/api/song/list`);
+      //const response = await axios.get(`/api/song/list`);
       setSongsData(response.data.songs);
       setTrack(response.data.songs[0]);
     } catch (error) {
@@ -128,6 +128,7 @@ export const PlayerContextProvider = ({ children }) => {
   const getAlbumsData = async () => {
     try {
       const response = await axios.get(`${url}/api/album/list`);
+      //const response = await axios.get(`/api/album/list`);
       setAlbumsData(response.data.album);
     } catch (error) {
       console.error("Error fetching albums data:", error);
@@ -171,8 +172,8 @@ export const PlayerContextProvider = ({ children }) => {
 
   const toggleMute = () => {
     if (audioRef.current) {
-      audioRef.current.muted = !isMuted;  // Toggle mute
-      setIsMuted(!isMuted);  // Update mute status
+      audioRef.current.muted = !isMuted; // Toggle mute
+      setIsMuted(!isMuted); // Update mute status
     }
   };
 
@@ -183,7 +184,6 @@ export const PlayerContextProvider = ({ children }) => {
       setVolume(newVolume); // Update volume state
     }
   };
-
 
   // Fetch data on component mount
   useEffect(() => {
@@ -216,7 +216,6 @@ export const PlayerContextProvider = ({ children }) => {
     handleVolumeChange,
     isLoop,
     toggleLoop,
-   
   };
 
   return (
