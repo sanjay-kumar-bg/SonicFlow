@@ -17,8 +17,8 @@ app.use(express.json()); //when ever we get requset it helps to parse
 app.use(cors()); //it helps to connect frontend with backend (if frontend is ruuning another port number and backend is running on another port number then cors helps to connect)
 
 //initializing routes
-app.use("/api/song",songRouter);
-app.use("/api/album",albumRouter);
+app.use("/song",songRouter);
+app.use("/album",albumRouter);
 
 app.get('/',(req,res)=> res.send("API Working"));
 
