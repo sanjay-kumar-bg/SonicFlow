@@ -12,7 +12,7 @@ export const PlayerContextProvider = ({ children }) => {
   const seekBg = useRef();
   const seekBar = useRef();
 
-  const url = "http://sonicflow"; // Fix the URL typo
+  const url = "https://sonicflow.onrender.com"; // Fix the URL typo
 
   // States for songs, albums, track, play status, and time
   const [songsData, setSongsData] = useState([]);
