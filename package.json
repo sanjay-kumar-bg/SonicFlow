@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run dev:sonicFlow-FrontEnd && npm run dev:admin"
+    "dev": "npm install --prefix ./sonicFlow-BackEnd && npm install --prefix ./sonicFlow-FrontEnd && npm install --prefix ./admin && npm run dev --prefix ./sonicFlow-FrontEnd && npm run dev --prefix ./admin"
   },
   "keywords": [],
   "author": "",
